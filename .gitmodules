@@ -1,4 +1,4 @@
 [submodule "external/stdlib-reference"]
 	path = external/stdlib-reference
-	url = https://github.com/aidanfnv/stdlib-reference
+	url = https://github.com/aidanfnv/stdlib-reference.git
 	branch = fix/readthedocs-tests
