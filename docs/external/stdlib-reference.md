@@ -1,2 +1,2 @@
-```{include} ../external/stdlib-reference/index.md
+```{include} ../../external/stdlib-reference/index.md
 ```
