@@ -253,3 +253,12 @@ description: Empowering real-time graphics developers with advanced language fea
         </div>
     </div>
 </div>
+
+```{toctree}
+:caption: Slang Documentation
+:includehidden:
+:titlesonly:
+
+Compilation API <docs/compilation-api.md>
+TEST <external/stdlib-reference/index.md>
+```
