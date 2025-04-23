@@ -1,0 +1,3 @@
+[submodule "external/stdlib-reference"]
+	path = external/stdlib-reference
+	url = https://github.com/shader-slang/stdlib-reference
