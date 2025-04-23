@@ -97,3 +97,9 @@ permalink: "/docs/"
         </div>
     </div>
 </div>
+
+.. toctree::
+   :caption: Slang Documentation
+   :includehidden:
+
+   compilation-api.md
