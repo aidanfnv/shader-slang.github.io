@@ -104,5 +104,5 @@ permalink: "/docs/"
 :titlesonly:
 
 Compilation API <compilation-api.md>
-TEST <../external/stdlib-reference/index.md>
+TEST <external/stdlib-reference.md>
 ```
