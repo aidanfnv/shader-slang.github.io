@@ -101,6 +101,7 @@ permalink: "/docs/"
 ```{toctree}
 :caption: Slang Documentation
 :includehidden:
+:titlesonly:
 
 Compilation API <compilation-api.md>
 ```
