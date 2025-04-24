@@ -97,3 +97,12 @@ permalink: "/docs/"
         </div>
     </div>
 </div>
+
+```{toctree}
+:caption: Slang Documentation
+:includehidden:
+:titlesonly:
+
+Using the Compilation API <compilation-api.md>
+Standard Modules Reference <external/stdlib-reference/index.md>
+```
