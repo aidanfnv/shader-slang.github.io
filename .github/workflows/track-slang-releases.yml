@@ -1,0 +1,72 @@
+name: Track Slang Releases
+
+on:
+  schedule:
+    # Runs daily at 01:00 UTC
+    - cron: '0 1 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  track-releases:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Fetch all history to check existing branches
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # Personal access token with repo scope
+      
+      - name: Set up Git
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+      
+      - name: Fetch Slang releases
+        id: fetch-releases
+        run: |
+          # Fetch all tags from the slang repository
+          RELEASES=$(curl -s "https://api.github.com/repos/shader-slang/slang/releases" | jq -r '.[].tag_name')
+          echo "releases<<EOF" >> $GITHUB_OUTPUT
+          echo "$RELEASES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: Process releases
+        run: |
+          # Get existing local branches
+          git fetch --all
+          EXISTING_BRANCHES=$(git branch -r | grep -v HEAD | sed 's/origin\///' | tr -d ' ')
+          
+          # Get the release tags from previous step
+          RELEASES="${{ steps.fetch-releases.outputs.releases }}"
+          
+          # Process each release tag
+          for TAG in $RELEASES; do
+            echo "Processing release tag: $TAG"
+            
+            # Check if we already have a branch for this tag
+            if echo "$EXISTING_BRANCHES" | grep -q "^slang-$TAG$"; then
+              echo "Branch slang-$TAG already exists, skipping"
+              continue
+            fi
+            
+            echo "Creating new branch for slang release: $TAG"
+            
+            # Create a new branch from the current default branch
+            git checkout -b "slang-$TAG"
+            
+            # You can add additional steps here to update content specific to this release
+            # For example, updating the submodule to point to this release tag
+            
+            # Create a file or make a change to mark this branch
+            echo "# Slang Release $TAG" > SLANG_RELEASE_VERSION
+            echo "This branch tracks the Slang release version $TAG" >> SLANG_RELEASE_VERSION
+            
+            # Commit and push the new branch
+            git add SLANG_RELEASE_VERSION
+            git commit -m "Track Slang release $TAG"
+            git push -u origin "slang-$TAG"
+            
+            # Return to the default branch
+            git checkout main || git checkout master
+          done 

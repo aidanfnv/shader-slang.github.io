@@ -1,0 +1,34 @@
+name: Update Submodules
+
+on:
+  schedule:
+    # Runs at midnight UTC every day
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: true
+          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # Personal access token with repo scope
+      
+      - name: Update submodules
+        run: |
+          git config --global user.name 'github-actions'
+          git config --global user.email 'github-actions@github.com'
+          git submodule update --remote
+      
+      - name: Commit and push if submodules changed
+        run: |
+          if [[ -n $(git status --porcelain) ]]; then
+            git add .
+            git commit -m "Update submodules"
+            git push
+          else
+            echo "No changes in submodules"
+          fi 
