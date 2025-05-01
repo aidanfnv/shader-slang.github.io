@@ -65,7 +65,6 @@ myst_title_to_header = True
 
 html_theme = "sphinx_rtd_theme"
 html_title = "Slang Documentation"
-html_static_path = ['__static']
 html_css_files = ["theme_overrides.css"]
 html_theme_options = {
     "light_css_variables": {
