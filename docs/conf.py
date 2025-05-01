@@ -74,6 +74,7 @@ html_theme_options = {
         "color-api-background": "#1e1e1e",
     },
 }
+html_js_files = ['readthedocs_search_trigger.js']
 
 # Use default Furo sidebar configuration - remove custom sidebar
 # html_sidebars = {}  # Let Furo use its defaults
