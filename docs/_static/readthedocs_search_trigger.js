@@ -2,7 +2,7 @@
 // https://docs.readthedocs.com/platform/stable/addons.html#integrate-with-search-as-you-type
 
 // Furo theme's search input selector
-const selector = "input#furo-search-field";
+const selector = "input.sidebar-search";
 
 document.addEventListener("DOMContentLoaded", function(event) {
     const searchInput = document.querySelector(selector);
