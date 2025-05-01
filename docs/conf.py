@@ -65,6 +65,7 @@ myst_title_to_header = True
 
 html_theme = "furo"
 html_title = "Slang Documentation"
+html_static_path = ['_static']
 html_theme_options = {
     "light_css_variables": {
         "color-api-background": "#f7f7f7",
