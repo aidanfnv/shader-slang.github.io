@@ -50,7 +50,6 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'myst_parser',
-    '_ext.fix_toc',  # Simple extension to set titlesonly=True
 ]
 
 # Debugging flag for verbose output
@@ -63,7 +62,10 @@ intersphinx_mapping = {
 intersphinx_disabled_domains = ['std']
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'index.md']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'index.md',
+                    'external/slang/docs/stdlib-doc.md',
+                    'external/slang/external',
+]
 
 # Configure myst-parser for markdown files
 myst_enable_extensions = [
@@ -75,24 +77,19 @@ myst_enable_extensions = [
 ]
 
 myst_url_schemes = ["http", "https", "mailto", "ftp"]
-myst_heading_anchors = 3
 myst_title_to_header = True
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "furo"
+html_theme = "sphinx_rtd_theme"
 html_title = "Slang Documentation"
 html_static_path = ['_static']
 html_theme_options = {
-    "light_css_variables": {
-        "color-api-background": "#f7f7f7",
-    },
-    "dark_css_variables": {
-        "color-api-background": "#1e1e1e",
-    },
+    "collapse_navigation": False,
 }
 html_js_files = ['readthedocs_search_trigger.js']
+html_css_files = ['theme_overrides.css']
 
 # Use default Furo sidebar configuration - remove custom sidebar
 # html_sidebars = {}  # Let Furo use its defaults
