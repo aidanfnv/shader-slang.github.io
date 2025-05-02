@@ -62,7 +62,19 @@ intersphinx_mapping = {
 intersphinx_disabled_domains = ['std']
 
 templates_path = ['_templates']
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'index.md']
+exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'index.md',
+                    'external/slang/docs/stdlib-doc.md',
+                    'external/slang/external',
+]
+include_patterns = ['index.rst', '*.md',
+                    "external/slang/docs/user-guide/*.md",
+                    "external/stdlib-reference/index.md",
+                    "external/stdlib-reference/attributes/**",
+                    "external/stdlib-reference/global-decls/**",
+                    "external/stdlib-reference/interface/**",
+                    "external/stdlib-reference/types/**",
+                    "external/slangpy/docs/**",
+]
 
 # Configure myst-parser for markdown files
 myst_enable_extensions = [
@@ -81,6 +93,7 @@ myst_title_to_header = True
 
 html_theme = "sphinx_rtd_theme"
 html_title = "Slang Documentation"
+html_static_path = ['_static']
 html_css_files = ["theme_overrides.css"]
 html_theme_options = {
     "collapse_navigation": False,
