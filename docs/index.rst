@@ -3,6 +3,8 @@ Slang Documentation
 
 .. toctree::
    :caption: Overview
+   :maxdepth: 1
+   :titlesonly:
 
    User Guide <external/slang/docs/user-guide/index>
    Standard Modules Reference <external/stdlib-reference/index>
