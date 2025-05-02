@@ -86,5 +86,4 @@ html_theme_options = {
     "collapse_navigation": False,
 }
 
-# Use default Furo sidebar configuration - remove custom sidebar
-# html_sidebars = {}  # Let Furo use its defaults
+html_sidebars = { '**': ['globaltoc.html', 'relations.html', 'sourcelink.html', 'searchbox.html'] }
