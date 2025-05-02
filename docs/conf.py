@@ -66,6 +66,14 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'index.md',
                     'external/slang/docs/stdlib-doc.md',
                     'external/slang/external',
 ]
+include_patterns = ['index.rst', '*.md',
+                    "external/slang/docs/user-guide/*.md",
+                    "external/stdlib-reference/index.md",
+                    "external/stdlib-reference/attributes/**",
+                    "external/stdlib-reference/global-decls/**",
+                    "external/stdlib-reference/interface/**",
+                    "external/stdlib-reference/types/**",
+]
 
 # Configure myst-parser for markdown files
 myst_enable_extensions = [
