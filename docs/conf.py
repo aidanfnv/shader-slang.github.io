@@ -50,7 +50,6 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'myst_parser',
-    '_ext.fix_toc',  # Simple extension to set titlesonly=True
 ]
 
 # Debugging flag for verbose output
@@ -75,22 +74,16 @@ myst_enable_extensions = [
 ]
 
 myst_url_schemes = ["http", "https", "mailto", "ftp"]
-myst_heading_anchors = 3
 myst_title_to_header = True
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = "furo"
+html_theme = "sphinx_rtd_theme"
 html_title = "Slang Documentation"
 html_css_files = ["theme_overrides.css"]
 html_theme_options = {
-    "light_css_variables": {
-        "color-api-background": "#f7f7f7",
-    },
-    "dark_css_variables": {
-        "color-api-background": "#1e1e1e",
-    },
+    "collapse_navigation": False,
 }
 
 # Use default Furo sidebar configuration - remove custom sidebar
