@@ -23,17 +23,12 @@ def fix_md_links_post_process(app, exception):
     output_dir = app.builder.outdir
     logger.info(f"[DEBUG] Post-processing HTML files in {output_dir}")
 
-    # Specifically focus on stdlib-reference directory
-    stdlib_dir = os.path.join(output_dir, 'external', 'stdlib-reference')
-    if not os.path.exists(stdlib_dir):
-        logger.info(f"[DEBUG] stdlib-reference directory not found: {stdlib_dir}")
-        return
-
+    # Process all HTML files in the output directory
     count = 0
     fixed = 0
 
-    # Walk through HTML files
-    for root, _, files in os.walk(stdlib_dir):
+    # Walk through all HTML files
+    for root, _, files in os.walk(output_dir):
         for filename in files:
             if filename.endswith('.html'):
                 filepath = os.path.join(root, filename)
@@ -46,48 +41,41 @@ def fix_md_links_post_process(app, exception):
                     # Original content for comparison
                     original_content = content
 
-                    # Look for href="#../path/to/file#fragment" pattern
-                    # This is the problematic pattern where a relative path is treated as a fragment
-                    pattern = r'href=(["\'])#(\.\.\/[^"\']+?)#([^"\']+?)\1'
+                    # Single pattern to match any href with a path that was incorrectly treated as a fragment
+                    # href="#path/to/file.html#anchor" or href="#path/to/file#anchor"
+                    pattern = r'href=(["\'])#([^#"\'\s]+)#([^"\'\s]+)\1'
+                    
                     matches = re.findall(pattern, content)
-
                     if matches:
                         logger.info(f"[DEBUG] Found {len(matches)} problematic links in {filepath}")
-
+                        
                         # Fix each match
                         for quote, path, fragment in matches:
-                            # Create the correct path with .html extension
+                            # Add .html extension if missing and not a directory
                             if not path.endswith('/') and '.' not in path.split('/')[-1]:
                                 path_with_html = path + '.html'
                             else:
                                 path_with_html = path
-
+                            
                             # Replace in content
                             old = f'href={quote}#{path}#{fragment}{quote}'
                             new = f'href={quote}{path_with_html}#{fragment}{quote}'
                             content = content.replace(old, new)
                             logger.info(f"[DEBUG] Fixed: {old} -> {new}")
-
-                    # Also fix simpler case: href="#../path/to/file"
-                    pattern = r'href=(["\'])#(\.\.\/[^"\'#]+?)\1'
+                    
+                    # Also check for direct references in text (not in href attributes)
+                    pattern = r'([a-zA-Z0-9_-]+\.html)#([^#\s]+\.html)#([^#\s"\']+)'
                     matches = re.findall(pattern, content)
-
+                    
                     if matches:
-                        logger.info(f"[DEBUG] Found {len(matches)} simple problematic links in {filepath}")
-
-                        # Fix each match
-                        for quote, path in matches:
-                            # Create the correct path with .html extension
-                            if not path.endswith('/') and '.' not in path.split('/')[-1]:
-                                path_with_html = path + '.html'
-                            else:
-                                path_with_html = path
-
+                        logger.info(f"[DEBUG] Found {len(matches)} direct text references in {filepath}")
+                        
+                        for current_page, target_path, fragment in matches:
                             # Replace in content
-                            old = f'href={quote}#{path}{quote}'
-                            new = f'href={quote}{path_with_html}{quote}'
+                            old = f'{current_page}#{target_path}#{fragment}'
+                            new = f'{target_path}#{fragment}'
                             content = content.replace(old, new)
-                            logger.info(f"[DEBUG] Fixed: {old} -> {new}")
+                            logger.info(f"[DEBUG] Fixed direct reference: {old} -> {new}")
 
                     # Save the file if changes were made
                     if content != original_content:
