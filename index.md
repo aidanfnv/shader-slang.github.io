@@ -205,7 +205,7 @@ description: Empowering real-time graphics developers with advanced language fea
                         to immediately benefit from Slang without requiring a complete rewrite or port.
                         Slang provides a compatibility module that enables the use of most GLSL intrinsic functions and
                         GLSL’s parameter binding syntax.</p>
-                    <a class="btn btn-primary" href="/docs/coming-from-hlsl/">Port from HLSL</a>
+                    <a class="btn btn-primary" href="https://docs.shader-slang.org/en/latest/coming-from-hlsl.html">Port from HLSL</a>
 
                 </div>
             </div>
