@@ -74,7 +74,7 @@ include_patterns = ['index.rst', '*.md',
                     "external/stdlib-reference/global-decls/**",
                     "external/stdlib-reference/interfaces/**",
                     "external/stdlib-reference/types/**",
-                    "external/slangpy/docs/**",
+                    "external/slangpy/docs/index.rst",
 ]
 
 # Configure myst-parser for markdown files
