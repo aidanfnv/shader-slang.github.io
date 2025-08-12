@@ -224,6 +224,34 @@ function txtSearchChange(event) {
         }
     });
 
+    // -------- PHASE 2: Tag-based search --------
+    if (window.documentTagIndex && Array.isArray(window.documentTagIndex)) {
+        window.documentTagIndex.forEach(doc => {
+            if (doc.tags && Array.isArray(doc.tags)) {
+                for (let tag of doc.tags) {
+                    // Check if any search token matches this tag
+                    let tagMatches = searchTokens.some(token => tag.includes(token));
+                    if (tagMatches) {
+                        const existing = matchedResults.find(r => r.href === doc.href);
+                        if (!existing) {
+                            // Check for perfect tag match
+                            const isTagPerfectMatch = searchTokens.some(token => tag === token);
+                            if (isTagPerfectMatch) hasPerfectMatch = true;
+                            
+                            matchedResults.push({
+                                display: `${doc.title} (tag: ${tag})`,
+                                href: doc.href,
+                                score: 1000 + (isTagPerfectMatch ? 500 : 0), // Lower than TOC matches
+                                type: 'tag'
+                            });
+                        }
+                        break; // Don't add the same document multiple times for different tag matches
+                    }
+                }
+            }
+        });
+    }
+
     matchedResults.sort((a, b) => b.score - a.score);
 
     // Add the "Search for..." item at the top

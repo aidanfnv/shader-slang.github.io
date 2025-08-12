@@ -4,6 +4,49 @@ from sphinx.util import logging
 from sphinx import addnodes
 from docutils import nodes
 import os
+import glob
+
+def extract_tags_from_content(content):
+    """Extract tags from HTML comments in document content."""
+    pattern = re.compile(r'<!-- tag:\s*(.*?)\s*-->', re.IGNORECASE)
+    matches = pattern.findall(content)
+    # Clean up and split multiple tags
+    tags = []
+    for match in matches:
+        # Split by comma and clean up each tag
+        tag_list = [tag.strip().lower() for tag in match.split(',') if tag.strip()]
+        tags.extend(tag_list)
+    return list(set(tags))  # Remove duplicates
+
+def build_document_tag_index(env):
+    """Build an index of all documents and their tags."""
+    logger = logging.getLogger(__name__)
+    tag_index = {}
+    
+    # Get all document files from the source directory
+    docs_dir = env.srcdir
+    for doc in env.found_docs:
+        try:
+            doc_path = env.doc2path(doc)
+            if os.path.exists(doc_path):
+                with open(doc_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                tags = extract_tags_from_content(content)
+                if tags:
+                    # Get document title
+                    title = get_title(env, doc)
+                    # Get document URL
+                    uri = '../' + env.app.builder.get_target_uri(doc).lstrip('/')
+                    tag_index[doc] = {
+                        'title': title,
+                        'uri': uri,
+                        'tags': tags
+                    }
+                    logger.info(f"Found tags in {doc}: {tags}")
+        except Exception as e:
+            logger.warning(f"Error processing tags for {doc}: {e}")
+    
+    return tag_index
 
 def extract_commented_toctree(content):
     """Extract the toctree content from a commented block."""
@@ -241,6 +284,23 @@ def render_entry(entry, level=1, indent=0, checkbox_counter=None):
     
     return html
 
+def generate_tag_data_js(tag_index):
+    """Generate JavaScript code to embed tag data in the page."""
+    import json
+    
+    # Create a simplified structure for JavaScript consumption
+    js_data = []
+    for doc, info in tag_index.items():
+        js_data.append({
+            'title': info['title'],
+            'href': info['uri'],
+            'tags': info['tags']
+        })
+    
+    # Generate JavaScript code
+    json_data = json.dumps(js_data, indent=2)
+    return f"window.documentTagIndex = {json_data};"
+
 def generate_toc_html(app, exception):
     logger = logging.getLogger(__name__)
     env = app.builder.env
@@ -250,10 +310,18 @@ def generate_toc_html(app, exception):
         return
 
     logger.info(f"Starting TOC generation from master doc: {master_doc}")
+    
+    # Build tag index for all documents
+    tag_index = build_document_tag_index(env)
+    logger.info(f"Built tag index with {len(tag_index)} tagged documents")
+    
     # Process all documents recursively
     sections = process_document(env, master_doc)
     logger.info(f"Found {len(sections)} sections in total")
     html = render_toc_html_from_doctree(sections)
+    
+    # Generate tag data as JavaScript
+    tag_data_js = generate_tag_data_js(tag_index)
 
     # Write the TOC to _static/toc.html with sphinx toctree styling
     out_path = os.path.join(app.outdir, '_static', 'toc.html')
@@ -338,13 +406,16 @@ def generate_toc_html(app, exception):
 {html}
     </div>
 </div>
+<script>
+{tag_data_js}
+</script>
 <script src="toc-highlight.js"></script>
 <script src="search.js"></script>
 </body>
 </html>"""
     
     with open(out_path, 'w', encoding='utf-8') as f:
-        f.write(full_html)
+        f.write(full_html.format(html=html, tag_data_js=tag_data_js))
     logger.info(f"Generated {out_path}")
 
 def setup(app):
