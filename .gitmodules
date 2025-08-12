@@ -1,6 +1,7 @@
 [submodule "docs/external/slang"]
 	path = docs/external/slang
-	url = https://github.com/shader-slang/slang.git
+	url = https://github.com/aidanfnv/slang.git
+	branch = test/user-guide-tags
 [submodule "docs/external/slangpy"]
 	path = docs/external/slangpy
 	url = https://github.com/shader-slang/slangpy.git
