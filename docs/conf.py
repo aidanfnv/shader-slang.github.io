@@ -141,7 +141,8 @@ html_title = "Slang Documentation"
 html_static_path = ['_static']
 html_css_files = ["theme_overrides.css"]
 html_js_files = [
-    "search.js",
+    "tag-data.js",
+    "search.js", 
     "section_highlight.js",
     "custom_body_classes.js",
     "iframe_theme_sync.js",

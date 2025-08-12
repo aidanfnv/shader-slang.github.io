@@ -301,6 +301,18 @@ def generate_tag_data_js(tag_index):
     json_data = json.dumps(js_data, indent=2)
     return f"window.documentTagIndex = {json_data};"
 
+def generate_tag_data_file(app, tag_index):
+    """Generate a separate JavaScript file with tag data for all pages."""
+    tag_data_js = generate_tag_data_js(tag_index)
+    
+    # Write tag data to a separate JS file that can be included on all pages
+    tag_file_path = os.path.join(app.outdir, '_static', 'tag-data.js')
+    with open(tag_file_path, 'w', encoding='utf-8') as f:
+        f.write(tag_data_js)
+    
+    logger = logging.getLogger(__name__)
+    logger.info(f"Generated tag data file: {tag_file_path}")
+
 def generate_toc_html(app, exception):
     logger = logging.getLogger(__name__)
     env = app.builder.env
@@ -314,6 +326,9 @@ def generate_toc_html(app, exception):
     # Build tag index for all documents
     tag_index = build_document_tag_index(env)
     logger.info(f"Built tag index with {len(tag_index)} tagged documents")
+    
+    # Generate tag data file for all pages
+    generate_tag_data_file(app, tag_index)
     
     # Process all documents recursively
     sections = process_document(env, master_doc)
