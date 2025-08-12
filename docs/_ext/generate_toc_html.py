@@ -403,7 +403,7 @@ def generate_toc_html(app, exception):
         <div id="tocSearchResult" style="display: none;"></div>
     </div>
     <div class="toc-content">
-{html}
+""" + html + f"""
     </div>
 </div>
 <script>
@@ -415,7 +415,7 @@ def generate_toc_html(app, exception):
 </html>"""
     
     with open(out_path, 'w', encoding='utf-8') as f:
-        f.write(full_html.format(html=html, tag_data_js=tag_data_js))
+        f.write(full_html)
     logger.info(f"Generated {out_path}")
 
 def setup(app):
