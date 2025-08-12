@@ -225,12 +225,15 @@ function txtSearchChange(event) {
     });
 
     // -------- PHASE 2: Tag-based search --------
+    console.log('Tag search phase - documentTagIndex:', window.documentTagIndex);
     if (window.documentTagIndex && Array.isArray(window.documentTagIndex)) {
+        console.log('Found tag index with', window.documentTagIndex.length, 'documents');
         window.documentTagIndex.forEach(doc => {
             if (doc.tags && Array.isArray(doc.tags)) {
                 for (let tag of doc.tags) {
                     // Check if any search token matches this tag
                     let tagMatches = searchTokens.some(token => tag.includes(token));
+                    console.log('Checking tag:', tag, 'against tokens:', searchTokens, 'matches:', tagMatches);
                     if (tagMatches) {
                         const existing = matchedResults.find(r => r.href === doc.href);
                         if (!existing) {
@@ -238,18 +241,22 @@ function txtSearchChange(event) {
                             const isTagPerfectMatch = searchTokens.some(token => tag === token);
                             if (isTagPerfectMatch) hasPerfectMatch = true;
                             
-                            matchedResults.push({
+                            const tagResult = {
                                 display: `${doc.title} (tag: ${tag})`,
                                 href: doc.href,
                                 score: 1000 + (isTagPerfectMatch ? 500 : 0), // Lower than TOC matches
                                 type: 'tag'
-                            });
+                            };
+                            console.log('Adding tag result:', tagResult);
+                            matchedResults.push(tagResult);
                         }
                         break; // Don't add the same document multiple times for different tag matches
                     }
                 }
             }
         });
+    } else {
+        console.log('No documentTagIndex found or it is not an array');
     }
 
     matchedResults.sort((a, b) => b.score - a.score);
