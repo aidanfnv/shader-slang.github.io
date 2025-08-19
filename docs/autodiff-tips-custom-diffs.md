@@ -107,7 +107,7 @@ One of the key strengths of Slang's autodiff system is its flexibility. You are 
 
 This means you can address just the parts of your function stack that truly need custom derivatives (e.g., the opaque or numerically unstable sections) while still leveraging Slang's powerful autodiff for the rest of your computations. This hybrid approach offers the best of both worlds: the convenience and efficiency of automatic differentiation where it's most effective, and the precision and control of custom derivatives where they are absolutely necessary.
 
-For examples of this in practice, take a look at some of the [experiments]() in our SlangPy samples repository. In particular, you can see a user-defined custom derivative function invoking bwd\_diff() to make use of automatic differentiation for the functions it calls out to in the [differentiable splatting experiment](https://github.com/shader-slang/slangpy-samples/blob/main/experiments/diff-splatting/diffsplatting2d.slang#L512).
+For examples of this in practice, take a look at some of the [experiments](https://github.com/shader-slang/slangpy-samples/blob/main/experiments) in our SlangPy samples repository. In particular, you can see a user-defined custom derivative function invoking bwd\_diff() to make use of automatic differentiation for the functions it calls out to in the [differentiable splatting experiment](https://github.com/shader-slang/slangpy-samples/blob/main/experiments/diff-splatting/diffsplatting2d.slang#L512).
 
 # Approximating Derivatives for Inherently Undifferentiable Functions
 
