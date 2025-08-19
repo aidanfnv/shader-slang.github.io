@@ -19,7 +19,8 @@ Opaque functions are those where the internal operations are not visible or acce
 
 For these functions, since the autodiff system cannot "see" inside to compute the derivative, providing a custom derivative allows you to still incorporate them into your differentiable computations.
 
-```slang
+<!-- There is no "slang" lexer, so "hlsl" will be used here instead -->
+```hlsl
 [BackwardDerivative(externalFunction_bwd)]
 float externalFunction(float x)
 {
@@ -46,7 +47,8 @@ This example shows one option to handle an opaque function that calls an externa
 
 Functions whose output depends on values retrieved from memory based on an input (e.g., accessing an RWStructuredBuffer on the GPU, or reading from a raw pointer CPU-side) introduce side-effects that automatic differentiation struggles to handle. This can include things like race conditions or ambiguous derivative write-back locations. Additionally, the lookup index itself is non-continuous. Therefore, custom derivatives are often necessary to accurately represent "change" at these points, potentially involving subgradients or specific approximations.
 
-```slang
+<!-- There is no "slang" lexer, so "hlsl" will be used here instead -->
+```hlsl
 RWStructuredBuffer<float> myBuffer;
 RWStructuredBuffer<Atomic<float>> gradientBuffer;  // Global buffer for gradients
 
@@ -74,7 +76,8 @@ Numerical stability refers to how well a computation preserves accuracy when fac
 
 By defining a custom derivative, you can implement more robust numerical methods that mitigate these issues, ensuring that your derivatives are well-behaved and do not lead to computational errors or poor training performance. This might involve re-parameterizations or specialized derivative formulas.
 
-```slang
+<!-- There is no "slang" lexer, so "hlsl" will be used here instead -->
+```hlsl
 [BackwardDerivative(safeDivide_bwd)]
 float safeDivide(float numerator, float denominator)
 {
