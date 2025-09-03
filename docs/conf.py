@@ -172,7 +172,7 @@ myst_heading_anchors = 3
 myst_title_to_header = True
 
 # Suppress specific warnings
-suppress_warnings = ["myst.header", "myst.xref_missing", "myst.xref_ambiguous"]
+suppress_warnings = ["myst.header", "myst.xref_ambiguous"]
 
 linkcheck_anchors = False
 linkcheck_ignore = [
