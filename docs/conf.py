@@ -114,6 +114,9 @@ project = 'Slang Documentation'
 author = 'Chris Cummings, Benedikt Bitterli, Sai Bangaru, Yong Hei, Aidan Foster'
 release = '0.1.0'
 
+# Use 'contents' instead of 'index' as root document to avoid conflict with Jekyll's index.md
+root_doc = 'contents'
+
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
@@ -150,7 +153,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'index.md',
 ]
 
 include_patterns = [
-    'index.rst',
+    'contents.rst',
     '*.md',
     '*.rst',
     '**/*.md',
