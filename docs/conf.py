@@ -43,7 +43,24 @@ def handle_utf16le_files(app, docname, source):
             source[0] = content
 
 def add_orphan_directive(app, docname, source):
+    # Skip the root document - it should never be orphan
+    root_doc = getattr(app.config, 'root_doc', 'index')
+    if docname == root_doc:
+        return
+
     content = source[0]
+
+    # Check if this is an RST file by looking at the source path
+    doc_path = Path(app.env.doc2path(docname))
+    is_rst = doc_path.suffix == '.rst'
+
+    if is_rst:
+        # RST files use :orphan: directive at the top
+        if ':orphan:' not in content:
+            source[0] = ':orphan:\n\n' + content
+        return
+
+    # For Markdown files, use YAML frontmatter
     # Check if the document already has "orphan: true"
     if 'orphan: true' in content:
         return
@@ -60,7 +77,7 @@ def add_orphan_directive(app, docname, source):
 
         # Insert orphan: true at the end of the frontmatter
         if frontmatter_end != -1:
-            lines.insert(frontmatter_end - 1, 'orphan: true')
+            lines.insert(frontmatter_end, 'orphan: true')
             source[0] = '\n'.join(lines)
     else:
         # No frontmatter, add frontmatter with "orphan: true"
